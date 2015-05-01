@@ -14,7 +14,7 @@ import pyfaidx
 ####################
 SCRIPT_PATH = sys.argv[0]
 SCRIPT_NAME = SCRIPT_PATH.split( '/' )[-1].split( '\\' )[-1]
-VERSION = '1.0.0'
+VERSION = '1.1.0'
 
 ########
 # fxns #
@@ -75,8 +75,6 @@ if __name__ == '__main__':
     #################
     # Compile RegEx #
     #################
-    whiteSpace = re.compile( '\n|\r' )
-
     if args.allowN:
         if args.onlyGstart:
             ngg2re = re.compile( 'G[ACGTN]{17}GG[NACGT]{1}GG' )
@@ -129,7 +127,7 @@ if __name__ == '__main__':
         # Pull sequence #
         #################
 
-        sequence = FAIDX[contig][start:end]
+        sequence = str( FAIDX[contig][start:end] ).upper()
 
         #################
         # Sense matches #
@@ -137,7 +135,7 @@ if __name__ == '__main__':
         for m in ngg2re.finditer( sequence ):
             grna = m.group()[:20]
             pam = m.group()[20:]
-            startPos = start + m.start()
+            startPos = start + m.start() + 1 # output is 1-base, not 0-base bed
             endPos = startPos + len( grna ) - 1
             OUTFH.write( "%s,%s,%s,%s,%s,sense,%s\n" % ( contig, startPos, endPos, grna, pam, 'Yes' if grna[0] == 'G' else 'No' ) )
 
@@ -147,7 +145,7 @@ if __name__ == '__main__':
         for m in ccn2re.finditer( sequence ):
             grna = rev_comp( m.group()[3:] )
             pam = rev_comp( m.group()[:3] )
-            startPos = start + m.start() + 3
+            startPos = start + m.start() + 3 + 1 # output is 1-base, not 0-base bed
             endPos = startPos + len( grna ) - 1
             OUTFH.write( "%s,%s,%s,%s,%s,antisense,%s\n" % ( contig, startPos, endPos, grna, pam, 'Yes' if grna[0] == 'G' else 'No' ) )
 
