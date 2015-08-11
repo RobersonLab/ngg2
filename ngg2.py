@@ -16,7 +16,7 @@ import time
 ####################
 SCRIPT_PATH = sys.argv[0]
 SCRIPT_NAME = SCRIPT_PATH.split( '/' )[-1].split( '\\' )[-1]
-VERSION = '1.2.0'
+VERSION = '1.2.1'
 
 ########
 # fxns #
@@ -37,20 +37,24 @@ def rev_comp( seq ):
 
 def compile_regex_patterns( type, only_g_starts ):
 	if type == 'exhaustive':
-		if only_g_starts:
+		if only_g_starts == True:
 			sense_regex = regex.compile( 'G[ACGT]{17}GG[ACGT]{1}GG' )
 			antisense_regex = regex.compile( 'CC[ACGT]{1}CC[ACGT]{17}C' )
-		else:
+		elif only_g_starts == False:
 			sense_regex = regex.compile( '[ACGT]{18}GG[ACGT]{1}GG' )
 			antisense_regex = regex.compile( 'CC[ACGT]{1}CC[ACGT]{18}' )
+		else:
+			error_msg( "Only logical accepted in compile_regex_patterns when describing only G starts" )
 	
 	elif type == 'block':
-		if only_g_starts:
+		if only_g_starts == True:
 			sense_regex = re.compile( 'G[ACGT]{17}GG[ACGT]{1}GG' )
 			antisense_regex = re.compile( 'CC[ACGT]{1}CC[ACGT]{17}C' )
-		else:
+		elif only_g_starts == False:
 			sense_regex = re.compile( '[ACGT]{18}GG[ACGT]{1}GG' )
 			antisense_regex = re.compile( 'CC[ACGT]{1}CC[ACGT]{18}' )
+		else:
+			error_msg( "Only logical accepted in compile_regex_patterns when describing only G starts" )
 	
 	else:
 		error_msg( "Type [%s] not recognized." % ( type ) )
@@ -286,7 +290,7 @@ if __name__ == '__main__':
 	#################
 	# Compile RegEx #
 	#################
-	regexTuple = compile_regex_patterns( 'block' if args.blockScan else 'exhaustive', args.maxSiteGs )
+	regexTuple = compile_regex_patterns( 'block' if args.blockScan else 'exhaustive', args.onlyGstart )
 
 	################
 	# process data #
