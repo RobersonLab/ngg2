@@ -1,7 +1,9 @@
 # ngg2
 Python script to identify NGGNGG Cas9 gRNA sites in any indexed FASTA file.
 
-It is important to note that sites are identified using regular expressions (re). Once characters are consumed in a match, they aren't reused. As such, the tool reports the first encountered gRNA site, *but* not second sites on the same strand that overlap the first.
+It is important to note that sites are identified using regular expressions (re). In standard mode, the sites are searched exhaustively.
+
+In block scan mode, once characters are consumed in a match. That means block scan only reports the first encountered gRNA site, *but* not second sites on the same strand that overlap it.
 
 ## Installation
 The script is not prepackaged, so just make sure it's in your PATH and executable. Tested on Windows 7 and Ubuntu 64-bit. Should be cross-platform compatible
