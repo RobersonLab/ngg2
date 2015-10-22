@@ -47,7 +47,7 @@ ngg2.py --outputFile myOutput.csv --unbuffered human_genome.fa
 Process in parallel, skipping uniqueness tests
 
 ```bash
-ngg2.py --outputFile myOutput.csv --skipUniqueScan human_genome.fa
+ngg2.py --outputFile myOutput.csv --cores 10 --skipUniqueScan human_genome.fa
 ```
 
 Don't print log info
