@@ -237,15 +237,13 @@ if __name__ == '__main__':
 	elif args.skipUniqueScan:
 		args.onlyUnique = False
 	
-	#### ATTN SET REGION VS ALL
-	
 	######################
 	# set options string #
 	######################
 	options = "%s v%s\n\nOptions\n=======\n" % ( SCRIPT_NAME, VERSION )
 	options += "FASTA: %s\n" % ( args.fastaFile )
 	options += "Output file: %s\n" % ( args.outputFile )
-	options += "Target: %s\n" % ( "Region(s)" if not args.region else "All contigs" )
+	options += "Target: %s\n" % ( "All contigs" if args.region is None else str( args.region ) )
 	options += "Allow non-canonical starts?: %s\n" % ( str( args.allowNoncanonical ) )
 	options += "Max G-bases per site: %s\n" % ( args.maxSiteGs )# max G content
 	options += "Scan type: %s\n" % ( "Block" if args.blockScan else "Exhaustive" ) # scan type
@@ -266,6 +264,7 @@ if __name__ == '__main__':
 	with pyfaidx.Fasta( args.fastaFile, as_raw=True ) as FAIDX:
 		if args.region is None:
 			args.region = FAIDX.keys()
+		
 		for reg in args.region:
 			contig, start, end = pyfaidx.ucsc_split( reg )  # returns [0,1) coordinates with NoneType if not start or end
 
