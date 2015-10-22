@@ -16,7 +16,7 @@ import time
 ####################
 SCRIPT_PATH = sys.argv[0]
 SCRIPT_NAME = SCRIPT_PATH.split( '/' )[-1].split( '\\' )[-1]
-VERSION = '1.2.1'
+VERSION = 'development'
 
 ########
 # fxns #
@@ -35,22 +35,22 @@ def rev_comp( seq ):
 	nuc_dict = { 'A':'T', 'C':'G', 'G':'C', 'T':'A', 'N':'N' }
 	return ''.join( [ nuc_dict[c] for c in seq.upper()[::-1] ] )
 
-def compile_regex_patterns( type, only_g_starts ):
+def compile_regex_patterns( type, allow_noncanonical ):
 	if type == 'exhaustive':
-		if only_g_starts == True:
+		if allow_noncanonical == False:
 			sense_regex = regex.compile( 'G[ACGT]{17}GG[ACGT]{1}GG' )
 			antisense_regex = regex.compile( 'CC[ACGT]{1}CC[ACGT]{17}C' )
-		elif only_g_starts == False:
+		elif allow_noncanonical == True:
 			sense_regex = regex.compile( '[ACGT]{18}GG[ACGT]{1}GG' )
 			antisense_regex = regex.compile( 'CC[ACGT]{1}CC[ACGT]{18}' )
 		else:
 			error_msg( "Only logical accepted in compile_regex_patterns when describing only G starts" )
 	
 	elif type == 'block':
-		if only_g_starts == True:
+		if allow_noncanonical == False:
 			sense_regex = re.compile( 'G[ACGT]{17}GG[ACGT]{1}GG' )
 			antisense_regex = re.compile( 'CC[ACGT]{1}CC[ACGT]{17}C' )
-		elif only_g_starts == False:
+		elif allow_noncanonical == True:
 			sense_regex = re.compile( '[ACGT]{18}GG[ACGT]{1}GG' )
 			antisense_regex = re.compile( 'CC[ACGT]{1}CC[ACGT]{18}' )
 		else:
@@ -216,7 +216,7 @@ if __name__ == '__main__':
 	parser.add_argument( 'fastaFile', help="Path to FASTA file to be scanned for gRNA sites" )
 	parser.add_argument( '--outputFile', help="Defaults to gRNAs.csv", default="gRNAs.csv" )
 	parser.add_argument( '--region', help="Defines region to search for sites. Use 'contig:start-end' for regions, or 'contig' for whole contig. If no regions are specified, the entire genome will be searched!", action='append', required=False )
-	parser.add_argument( '--onlyGstart', help="Only retain sites that start with G base", action="store_true", default=False )
+	parser.add_argument( '--allowNoncanonical', help="Allow sites that start with bases other than G", action="store_true", default=False )
 	parser.add_argument( '--blockScan', help="Fast, but imperfect scanning that ignores gRNA sites that does not find overlapping gRNA sites", action='store_true', default=False )
 	parser.add_argument( '--skipUniqueScan', help="Do not test for uniqueness if invoked (can still use multiple cores)", default=False, action="store_true" )
 	parser.add_argument( '--unbuffered', help="Scan contigs in order with one processor and immediately write results. Block scan + unbuffered may provide fasta performance", default=False, action="store_true" )
@@ -246,7 +246,7 @@ if __name__ == '__main__':
 	options += "FASTA: %s\n" % ( args.fastaFile )
 	options += "Output file: %s\n" % ( args.outputFile )
 	options += "Target: %s\n" % ( "Region(s)" if not args.region else "All contigs" )
-	options += "Only allow G starts: %s\n" % ( str( args.onlyGstart ) )
+	options += "Allow non-canonical starts?: %s\n" % ( str( args.allowNoncanonical ) )
 	options += "Max G-bases per site: %s\n" % ( args.maxSiteGs )# max G content
 	options += "Scan type: %s\n" % ( "Block" if args.blockScan else "Exhaustive" ) # scan type
 	options += "Buffered scan: %s\n" % ( "No" if args.unbuffered else "Yes" ) # unbuffered
@@ -290,7 +290,7 @@ if __name__ == '__main__':
 	#################
 	# Compile RegEx #
 	#################
-	regexTuple = compile_regex_patterns( 'block' if args.blockScan else 'exhaustive', args.onlyGstart )
+	regexTuple = compile_regex_patterns( 'block' if args.blockScan else 'exhaustive', args.allowNoncanonical )
 
 	################
 	# process data #
