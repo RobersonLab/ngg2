@@ -10,13 +10,14 @@ The script is not prepackaged, so just make sure it's in your PATH and executabl
 * Python (tested on Python 2.7)
 * FASTA file of genome / contig of interest
 * [pyfaidx](https://github.com/mdshw5/pyfaidx)
+* [regex](https://pypi.python.org/pypi/regex)
 
 ## Usage
 
 Find gRNA sites for in the first 10M bp of human chromosome 1.
 
 ```bash
-ngg2.py --outputFile myOutput.csv --region chr1:1-10000000 human_genome.fa
+ngg2.py --outputFile myOutput.csv --region 1:1-10000000 human_genome.fa
 ```
 
 Find all gRNA sites in a FASTA file.
@@ -25,16 +26,28 @@ Find all gRNA sites in a FASTA file.
 ngg2.py --outputFile myOutput.csv human_genome.fa
 ```
 
-Find all gRNA sites in a FASTA file, but only keep canonical G starting sites.
+Find all gRNA sites in a FASTA file, but allow non-canonical (A, T, C) starting bases.
 
 ```bash
-ngg2.py --outputFile myOutput.csv --onlyGstart human_genome.fa
+ngg2.py --outputFile myOutput.csv --allowNoncanonical human_genome.fa
 ```
 
-Find all gRNA sites in a FASTA file, only keep canonical sites, but allow N reference bases.
+Find all gRNA sites in a FASTA file, using 10 processors
 
 ```bash
-ngg2.py --outputFile myOutput.csv --onlyGstart --allowN human_genome.fa
+ngg2.py --outputFile myOutput.csv --cores 10 human_genome.fa
+```
+
+Process in serial and write results to file, leaving out uniqueness of gRNA site
+
+```bash
+ngg2.py --outputFile myOutput.csv --unbuffered human_genome.fa
+```
+
+Process in parallel, skipping uniqueness tests
+
+```bash
+ngg2.py --outputFile myOutput.csv --skipUniqueScan human_genome.fa
 ```
 
 Don't print log info
