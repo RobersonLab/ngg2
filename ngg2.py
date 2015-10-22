@@ -221,7 +221,7 @@ if __name__ == '__main__':
 	parser.add_argument( '--skipUniqueScan', help="Do not test for uniqueness if invoked (can still use multiple cores)", default=False, action="store_true" )
 	parser.add_argument( '--unbuffered', help="Scan contigs in order with one processor and immediately write results. Block scan + unbuffered may provide fasta performance", default=False, action="store_true" )
 	parser.add_argument( '--onlyUnique', help="Only report unique hits in output and counts", default=False, action="store_true" )
-	parser.add_argument( '--maxSiteGs', help="ATTN", default=15, type=int )
+	parser.add_argument( '--maxSiteGs', help="Maximum # of G bases in gRNA site", default=15, type=int )
 	parser.add_argument( '--cores', help="Set to run contigs / strands on multiple cores simultaneously", type=int, default=1 )
 	parser.add_argument( "--quiet", default=True, action='store_false', dest='verbose' )
 
