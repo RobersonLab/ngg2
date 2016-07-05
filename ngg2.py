@@ -16,7 +16,7 @@ import time
 ####################
 SCRIPT_PATH = sys.argv[0]
 SCRIPT_NAME = SCRIPT_PATH.split( '/' )[-1].split( '\\' )[-1]
-VERSION = 'v1.2.3'
+VERSION = 'v1.3.0'
 
 ########
 # fxns #
