@@ -24,7 +24,7 @@ setup(
 	],
 	keywords="CRISPR Cas9 3'GG site finder",
 	install_requires = ['pyfaidx', 'regex>=2016.01.10', 'six'],
-	entry_points = {'console_scripts':["ngg2 = ngg2.__main__:main"]},
+	entry_points = {'console_scripts':["ngg2 = ngg2.__main__:run"]},
 	test_suite = 'nose.collector',
 	tests_require = ['nose']
 )
