@@ -5,7 +5,7 @@ Python package to identify NGGNGG Cas9 gRNA sites in any indexed FASTA file.
 
 It is important to note that sites are identified using regular expressions (re). In standard mode, the sites are searched exhaustively.
 
-In block scan mode, once characters are consumed in a match. That means block scan only reports the first encountered gRNA site, *but* not second sites on the same strand that overlap it.
+In block scan mode, once characters are consumed in a match, they're gone. That means block scan only reports the first encountered gRNA site, *but* not second sites on the same strand that overlap it.
 
 ## Installation
 is available via pip or GitHub download.
