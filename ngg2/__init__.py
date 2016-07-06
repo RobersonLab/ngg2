@@ -28,16 +28,16 @@ def rev_comp( seq ):
 	nuc_dict = { 'A':'T', 'C':'G', 'G':'C', 'T':'A', 'N':'N' }
 	return ''.join( [ nuc_dict[c] for c in seq.upper()[::-1] ] )
 
-def compile_regex_patterns( type, allow_noncanonical ):
+def compile_regex_patterns( scan_type, allow_noncanonical ):
 	"""Compile appropriate regular expressions to find + or - strand 3'GG sites
 	"""
 	
 	if type( allow_noncanonical ) is not bool:
 		raise( TypeError( "In compile_regex_patterns, allow_noncanonical must be a bool!" ) )
-	elif type not in [ 'exhaustive', 'block' ]:
+	elif scan_type not in [ 'exhaustive', 'block' ]:
 		raise( ValueError( "In compile_regex_patterns, only exhaustive and block are valid options!" ) )
 	
-	if type == 'exhaustive':
+	if scan_type == 'exhaustive':
 		if allow_noncanonical == False:
 			sense_regex = regex.compile( 'G[ACGT]{17}GG[ACGT]{1}GG' )
 			antisense_regex = regex.compile( 'CC[ACGT]{1}CC[ACGT]{17}C' )
@@ -45,7 +45,7 @@ def compile_regex_patterns( type, allow_noncanonical ):
 			sense_regex = regex.compile( '[ACGT]{18}GG[ACGT]{1}GG' )
 			antisense_regex = regex.compile( 'CC[ACGT]{1}CC[ACGT]{18}' )
 	
-	elif type == 'block':
+	elif scan_type == 'block':
 		if allow_noncanonical == False:
 			sense_regex = re.compile( 'G[ACGT]{17}GG[ACGT]{1}GG' )
 			antisense_regex = re.compile( 'CC[ACGT]{1}CC[ACGT]{17}C' )
