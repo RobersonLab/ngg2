@@ -77,5 +77,5 @@ ngg2 --outputFile myOutput.csv --cores 10 --skipUniqueScan human_genome.fa
 Don't print log info
 
 ```bash
-ngg2 --outputFile myOutput.csv --quiet human_genome.fa
+ngg2 --outputFile myOutput.csv --loglevel CRITICAL
 ```
